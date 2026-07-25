@@ -2,61 +2,113 @@
 
 ## Objective
 
-Move the Culinary Arts 1 & 2 Student Field Manual from a primarily Word-based publication into a maintainable GitHub environment that supports collaboration, review, automated builds, and a student-facing website.
+Move the **existing, approved working Culinary Arts 1 & 2 Student Field Manual website** into this GitHub repository without redesigning or recreating it.
 
-## Architectural Direction
+The current site's code, visual system, navigation, content structure, responsive behavior, and editorial decisions are the migration baseline. The purpose of the transition is to place that exact working implementation under durable version control so the team can maintain, review, and improve it collaboratively.
 
-The repository should separate content from presentation.
+## Non-Negotiable Migration Rule
 
-- Structured source files contain the approved instructional content.
-- Reusable data files contain recipes, glossary terms, quick-reference tables, chapter metadata, and cross-links.
-- The website renders those sources consistently.
-- Word and PDF editions are generated release artifacts or preserved baseline references.
+This is a **code migration, not a new website build**.
 
-## Recommended Content Structure
+- Preserve the current working site's HTML, CSS, JavaScript, assets, navigation, layout, and content.
+- Preserve the edits and visual decisions completed during the most recent review cycle.
+- Do not replace the existing design with a new framework, theme, template, or information architecture.
+- Do not simplify, reorganize, or rewrite working pages merely to make them easier to migrate.
+- Any future redesign or structural change must occur only after the exact current site has been imported, verified, and preserved in Git history.
+
+## Migration Sequence
+
+### 1. Capture the Exact Current Site
+
+Obtain the complete current working site package, including:
+
+- all HTML or application source files;
+- CSS and design assets;
+- JavaScript and interactive behavior;
+- images, icons, and local media;
+- fonts or font references;
+- downloadable resources;
+- configuration files;
+- build or dependency files, if used;
+- the current folder and routing structure.
+
+The imported version must render the same as the current working version before any content conversion or architectural cleanup begins.
+
+### 2. Preserve a Baseline Snapshot
+
+- Commit the imported site as an identifiable migration baseline.
+- Record its source, date, and status.
+- Preserve screenshots or a visual review record for major pages.
+- Tag the exact imported state before further development.
+
+### 3. Verify Migration Fidelity
+
+Confirm that the GitHub-hosted copy preserves:
+
+- page layout and spacing;
+- typography and visual hierarchy;
+- navigation and cross-links;
+- recipe-card presentation;
+- mobile and Chromebook behavior;
+- print behavior;
+- downloads and internal assets;
+- accessibility features already present;
+- all edits accepted during the latest review.
+
+Migration is not complete until the repository version matches the current working site.
+
+### 4. Add Editable Content Architecture Behind the Existing Site
+
+After the exact site is safely preserved, progressively separate reusable content from presentation where doing so improves maintainability without changing the approved experience.
+
+- Structured source files may contain approved instructional content.
+- Reusable data files may contain recipes, glossary terms, quick-reference tables, chapter metadata, and cross-links.
+- Existing pages and components remain the presentation baseline.
+- Refactoring must be visually and functionally neutral unless a separate change is reviewed and approved.
+- Word and PDF editions remain baseline references or release artifacts.
+
+## Recommended Repository Structure
+
+The exact imported site structure should be preserved first. Supporting materials may then be organized around it:
 
 ```text
-content/
-  chapters/
-    01-becoming-a-culinary-professional.md
-    02-kitchen-safety.md
-    03-food-safety-and-sanitation.md
-    ...
-  appendices/
-  glossary/
-  student-tools/
-data/
-  recipes/
-  equipment/
-  standards/
-  navigation/
-public/
-  images/
-  downloads/
-site/
-  components/
-  layouts/
-  styles/
+site/                         # exact migrated working site
+manual/                       # editable manual source and reference editions
+recipe-book/                  # recipe source and structured records
+sources/
+  curriculum/
+  assessment/
+  project-context/
+governance/
+public/                       # shared public assets/downloads where applicable
+.github/                      # collaboration and Actions workflows
 ```
 
-## Initial Migration Work Packages
+The imported site should not be forced into this proposed structure if doing so would alter or break it. Preserve first; refactor later.
 
-### 1. Preserve the Baseline
+## Source Materials to Retain
 
-- Retain Version 1.0 as the historical reference edition.
-- Retain the current working master separately.
-- Record version, date, status, and source location.
+### Primary Baselines
 
-### 2. Convert the Manual into Editable Source
+- Current working website code and assets
+- Current Field Manual working master
+- Field Manual Version 1.0 historical reference
+- Culinary Recipe Book V2
 
-- Divide the manual into one Markdown file per chapter.
-- Preserve headings, tables, callouts, check-for-understanding questions, and student tools.
-- Assign stable chapter IDs and filenames.
-- Add metadata for title, section, status, review date, and related recipes.
+### Instructional and Design Sources
 
-### 3. Normalize the Recipe Book
+- Culinary Arts 1 & 2 course outline
+- Advanced Culinary scope and sequence
+- Culinary Pathway Skills Map
+- GCSD Culinary Employability Profile
+- Culinary Pathway Design Interview Transcript
+- approved visual and editorial review notes from the current site
 
-Each recipe should become a structured record containing, as available:
+## Recipe-Book Integration
+
+The original recipe-book PDF remains an authoritative reference during migration.
+
+Recipes may later become structured records containing, as available:
 
 - recipe title;
 - unit or chapter connection;
@@ -71,37 +123,28 @@ Each recipe should become a structured record containing, as available:
 - scaling notes;
 - source and revision status.
 
-The original recipe-book PDF remains a reference while recipes are cleaned and verified individually.
+This conversion must not change the current site's approved recipe-card design without a separate review.
 
-### 4. Establish Review Controls
+## Collaboration Controls
 
-- Require branches and pull requests for substantive changes.
-- Use issue templates for corrections, recipe revisions, accessibility findings, and proposed chapter changes.
-- Add content checks for broken links, missing metadata, duplicate IDs, and accessibility basics.
+- Preserve the imported baseline on `main` or in a tagged release before substantive changes.
+- Use branches and pull requests for later revisions.
+- Require reviewers to distinguish migration corrections from proposed design changes.
+- Keep unrelated changes out of migration pull requests.
+- Add checks for broken links, missing files, and build failures.
 
-### 5. Build the Student Website
+## GitHub Actions
 
-The first website release should prioritize:
-
-- clear chapter navigation;
-- search;
-- recipe cards;
-- print-friendly recipes and student tools;
-- mobile and Chromebook usability;
-- accessible headings, contrast, alt text, keyboard navigation, and readable tables;
-- links between chapters, recipes, and classroom tools.
-
-The website is intended primarily for preparation, review, planning, and reflection before and after labs—not as a real-time kitchen operations dashboard.
-
-### 6. Add GitHub Actions
+Actions should support the current site rather than replace its workflow.
 
 Recommended workflows:
 
-- validate Markdown and links on pull requests;
-- validate recipe-data fields;
-- build a preview site for review;
-- deploy the approved main branch to GitHub Pages;
-- create versioned release packages containing the website build and approved downloadable documents.
+- validate links and required assets;
+- build the existing site using its current toolchain, if any;
+- generate a preview for pull requests;
+- deploy the approved branch to GitHub Pages;
+- verify that the deployed artifact contains only approved public content;
+- create versioned release packages when appropriate.
 
 ## Items That Should Not Be Publicly Committed
 
@@ -117,9 +160,11 @@ Recommended workflows:
 
 The transition is complete when:
 
-1. the complete approved manual exists as editable structured repository source;
-2. recipes are stored as maintainable records rather than only a static PDF;
-3. team members can propose and review changes through pull requests;
-4. automated checks protect structure and accessibility;
-5. the student website is built and deployed from the repository;
-6. Word and PDF editions can be reproduced or released without manually rebuilding the entire publication.
+1. the exact current working site code and assets exist in this repository;
+2. the repository version renders and functions like the current working version;
+3. the accepted edits from the most recent review are preserved;
+4. the migrated baseline is committed and tagged before refactoring;
+5. team members can propose and review later changes through pull requests;
+6. automated checks protect the existing site from regression;
+7. GitHub Pages deploys the preserved site successfully;
+8. editable manual and recipe content can evolve behind the existing approved presentation without silently creating a different website.
