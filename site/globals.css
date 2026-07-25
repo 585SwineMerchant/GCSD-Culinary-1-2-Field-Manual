@@ -93,11 +93,11 @@ nav button{display:flex;align-items:center;justify-content:center;line-height:1.
 .heroArtwork{
  display:block;
  width:100%;
- aspect-ratio:3/2;
- background-repeat:no-repeat;
- background-position:center;
- background-size:contain;
- mix-blend-mode:multiply;
+ height:auto;
+ aspect-ratio:auto;
+ object-fit:contain;
+ object-position:center;
+ mix-blend-mode:normal;
 }
 .unitGallery .unitArtwork{
  display:block;
