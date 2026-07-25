@@ -10,7 +10,7 @@ type Profile={name:string;date:string;period:string;instructor:string};
 type LessonResponse={bell:string;exit:string};
 type LessonPrompt={bell:string;exit:string};
 const units=unitContent.map(u=>[u.title,u.summary]);
-const asset=(path:string)=>`./${path}`;
+const asset=(path:string)=>`./${path}?v=20260725-image-repair`;
 const unitImages=["unit-1-kitchen-readiness.png","unit-2-bread-grains-pasta.png","unit-3-flavor-math.png","unit-4-proteins-eggs.png","unit-5-stocks-soups-sauces.png","unit-6-produce-dairy.png","unit-7-baking-pastry.png","unit-8-global-menu.png"].map(name=>asset(`assets/${name}`));
 const instructors=["Kevin McCann","Jason Carlson","Linda"] as const;
 const lessonPrompts:LessonPrompt[][]=[
