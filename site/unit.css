@@ -1,7 +1,7 @@
 .unitDetail{background:transparent;border-radius:0;border-left:0;border-right:0;border-bottom:0;box-shadow:none;padding-top:0}
 .unitIntro,.lesson,.unitResources{background:#fffdf8ef;border:1px solid var(--line);border-radius:17px;box-shadow:0 7px 20px #17392a15}
 .unitIntro{border-top:8px solid var(--green);padding:clamp(24px,4vw,42px)}
-.unitSketch{display:block;width:100%;height:min(320px,32vw);object-fit:contain;margin:-12px 0 26px;border-bottom:1px solid var(--line);mix-blend-mode:multiply}
+.unitSketch{display:block;width:100%;aspect-ratio:4/3;max-height:320px;background-repeat:no-repeat;background-position:center;background-size:contain;margin:-12px 0 26px;border-bottom:1px solid var(--line);mix-blend-mode:multiply}
 .unitIntro h2{font-size:clamp(30px,3.4vw,45px);max-width:850px}
 .unitIntro li,.lesson li{line-height:1.55;margin:8px 0}
 .vocab{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px;padding-top:18px;border-top:1px solid var(--line)}
