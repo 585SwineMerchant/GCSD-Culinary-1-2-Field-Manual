@@ -87,3 +87,30 @@ nav button{display:flex;align-items:center;justify-content:center;line-height:1.
  .commitmentMatrix article>h3,.commitmentMatrix article>div{border-right:0;border-bottom:1px solid var(--line)}
  .commitmentMatrix article>div:last-child{border-bottom:0}
 }
+
+/* Ratio-locked artwork frames: the frame owns the geometry and the full
+   illustration is painted inside it without cropping or distortion. */
+.heroArtwork{
+ display:block;
+ width:100%;
+ aspect-ratio:3/2;
+ background-repeat:no-repeat;
+ background-position:center;
+ background-size:contain;
+ mix-blend-mode:multiply;
+}
+.unitGallery .unitArtwork{
+ display:block;
+ flex:none;
+ width:116px;
+ aspect-ratio:4/3;
+ background-repeat:no-repeat;
+ background-position:center;
+ background-size:contain;
+}
+.unitGallery .unitGalleryLabel{
+ display:flex;
+ flex-direction:column;
+ gap:5px;
+ min-width:0;
+}
