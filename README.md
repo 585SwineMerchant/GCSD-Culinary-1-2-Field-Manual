@@ -14,6 +14,20 @@ This repository supports:
 - future automation through GitHub Actions;
 - preservation of the sources and design decisions that shaped the manual.
 
+## Classroom boundary
+
+The website is the stable instructional manual; it is not a learning-management
+system. Google Classroom owns assigned work, student-specific documents,
+deadlines, submissions, and feedback. Each instructional day may include one
+Daily Assignment containing the bellringer, the permanent link to the exact
+manual lesson, and the exit ticket. Larger products use separate named Classroom
+assignments with their own prepared templates and rubrics.
+
+The manual may retain non-identifying browser-saved unit checklist progress as a
+student self-management aid. It does not store written responses, grades,
+authoritative completion records, or student-identifiable information. See
+`governance/CLASSROOM-INTEGRATION.md` for the complete operating model.
+
 ## Repository Structure
 
 - `manual/` — current working manual and archived reference versions
