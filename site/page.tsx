@@ -6,13 +6,10 @@ import "./globals.css";
 import "./unit.css";
 type View="home"|"units"|"recipes"|"reference"|"mission";
 type Recipe=(typeof recipes)[number];
-type Profile={name:string;date:string;period:string;instructor:string};
-type LessonResponse={bell:string;exit:string};
 type LessonPrompt={bell:string;exit:string};
 const units=unitContent.map(u=>[u.title,u.summary]);
 const asset=(path:string)=>`./${path}?v=20260725-homepage-image`;
 const unitImages=["unit-1-kitchen-readiness.png","unit-2-bread-grains-pasta.png","unit-3-flavor-math.png","unit-4-proteins-eggs.png","unit-5-stocks-soups-sauces.png","unit-6-produce-dairy.png","unit-7-baking-pastry.png","unit-8-global-menu.png"].map(name=>asset(`assets/${name}`));
-const instructors=["Kevin McCann","Jason Carlson","Linda"] as const;
 const lessonPrompts:LessonPrompt[][]=[
  [
   {bell:"What makes professionalism observable rather than subjective?",exit:"What should you do after completing your assigned task early?"},
@@ -146,11 +143,9 @@ const sharedPrinciples=[
 export default function Home(){
  const [view,setView]=useState<View>("home"),[unit,setUnit]=useState(1),[lesson,setLesson]=useState(0),[recipe,setRecipe]=useState<Recipe|null>(null),[q,setQ]=useState(""),[done,setDone]=useState<Record<string,boolean>>({});
  const [term,setTerm]=useState("");
- const [profile,setProfile]=useState<Profile>({name:"",date:new Date().toISOString().slice(0,10),period:"",instructor:""});
- const [responses,setResponses]=useState<Record<string,LessonResponse>>({});
  const vocabDialog=useRef<HTMLDialogElement>(null);
  useEffect(()=>{const x=localStorage.getItem("culinary-progress");if(x)setDone(JSON.parse(x))},[]);
- useEffect(()=>{const x=localStorage.getItem("culinary-daily-profile");if(x)setProfile(d=>({...d,...JSON.parse(x)}));const y=localStorage.getItem("culinary-lesson-responses");if(y)setResponses(JSON.parse(y))},[]);
+ useEffect(()=>{localStorage.removeItem("culinary-daily-profile");localStorage.removeItem("culinary-lesson-responses")},[]);
  const toggle=(k:string)=>{const x={...done,[k]:!done[k]};setDone(x);localStorage.setItem("culinary-progress",JSON.stringify(x))};
  const pct=(n:number)=>Math.round(unitTasks[n-1].filter((_,i)=>done[`${n}-${i}`]).length/4*100);
  const current=units.findIndex((_,i)=>pct(i+1)<100)+1||8;
@@ -161,30 +156,9 @@ export default function Home(){
  const content=unitContent[unit-1], activeLesson=content.lessons[lesson];
  const tasks=unitTasks[unit-1];
  const showTerm=(x:string)=>{setTerm(x);vocabDialog.current?.showModal()};
- const responseKey=`${unit}-${lesson}`;
- const response=responses[responseKey]||{bell:"",exit:""};
- const updateProfile=(key:keyof Profile,value:string)=>{const next={...profile,[key]:value};setProfile(next);localStorage.setItem("culinary-daily-profile",JSON.stringify(next))};
- const updateResponse=(key:keyof LessonResponse,value:string)=>{const next={...responses,[responseKey]:{...response,[key]:value}};setResponses(next);localStorage.setItem("culinary-lesson-responses",JSON.stringify(next))};
  const prompt=lessonPrompts[unit-1][lesson];
  const bellPrompt=prompt.bell;
  const exitPrompt=prompt.exit;
- const dailyText=`GCSD Culinary Arts 1 & 2 — Daily Response
-Student: ${profile.name || "Not entered"}
-Date: ${profile.date}
-Class period: ${profile.period || "Not entered"}
-Instructor: ${profile.instructor || "Not selected"}
-Unit ${unit}: ${content.title}
-Lesson: ${activeLesson.title}
-
-Bell Ringer
-Prompt: ${bellPrompt}
-${response.bell || "No response entered."}
-
-Exit Ticket
-Prompt: ${exitPrompt}
-${response.exit || "No response entered."}`;
- const emailDaily=()=>{location.href=`mailto:?subject=${encodeURIComponent(`Culinary Daily Response — ${profile.name || "Student"} — ${profile.date}`)}&body=${encodeURIComponent(dailyText)}`};
- const copyDaily=async()=>{await navigator.clipboard.writeText(dailyText);alert("Lesson response copied. Paste it into email, Classroom, or your course submission space.")};
  return <div className="shell">
   <header><button className="brand" onClick={()=>go("home")}><i>✦</i> GCSD Culinary Arts 1 & 2</button><nav>{(["home","units","recipes","reference","mission"] as View[]).map(v=><button className={view===v?"active":""} onClick={()=>go(v)} key={v}>{v==="home"?"⌂ ":v==="units"?"▤ ":v==="recipes"?"♨ ":v==="reference"?"☷ ":"✦ "}{v==="reference"?"Quick Reference":v==="mission"?"Our Program":v[0].toUpperCase()+v.slice(1)}</button>)}</nav></header>
   <main>
@@ -198,11 +172,10 @@ ${response.exit || "No response entered."}`;
   <section className="unitGallery"><div className="galleryHeading"><small>EIGHT CONNECTED UNITS</small><h2>Follow the course. Revisit any station.</h2></div><div>{units.map((u,i)=><button key={u[0]} onClick={()=>openUnit(i+1)}><span className="unitArtwork" style={{backgroundImage:`url("${unitImages[i]}")`}} role="img" aria-label={`${u[0]} illustration`}/><span className="unitGalleryLabel"><small>UNIT {i+1}</small><b>{u[0]}</b></span></button>)}</div></section></>}
   {view==="units"&&!recipe&&<section className="page unitPage"><small>{content.course.toUpperCase()} • COURSE SEQUENCE</small><h1>Unit {unit}: {content.title}</h1><p className="lead">{content.summary}</p><div className="unitLayout"><aside className="unitList">{units.map((u,i)=><button className={unit===i+1?"selected":""} onClick={()=>openUnit(i+1)} key={u[0]}><span>{i+1}</span><b>{u[0]}</b><small>{pct(i+1)}%</small></button>)}</aside><div className="unitDetail">
    <h3 className="sectionTitle">Lessons in this unit</h3><div className="lessonNav">{content.lessons.map((l,i)=><button className={lesson===i?"selectedLesson":""} onClick={()=>{setLesson(i);setTimeout(()=>document.getElementById("lesson")?.scrollIntoView({behavior:"smooth",block:"start"}),0)}} key={l.title}><span>{i+1}</span><b>{l.title}</b><small>{l.purpose}</small></button>)}</div>
-   <section className="responseProfile"><small>THIS CHROMEBOOK REMEMBERS THESE DETAILS</small><div className="studentFields"><label>Student<input value={profile.name} onChange={e=>updateProfile("name",e.target.value)} placeholder="Your name"/></label><label>Class period<input value={profile.period} onChange={e=>updateProfile("period",e.target.value)} placeholder="Example: Period 3"/></label><label>Instructor<select value={profile.instructor} onChange={e=>updateProfile("instructor",e.target.value)}><option value="">Choose instructor</option>{instructors.map(x=><option key={x}>{x}</option>)}</select></label><label>Date<input type="date" value={profile.date} onChange={e=>updateProfile("date",e.target.value)}/></label></div></section>
-   <section className="dailyResponse bellRinger"><div><small>START OF LESSON {lesson+1}</small><h2>Bell ringer</h2><p>{bellPrompt}</p></div><label><span className="srOnly">Bell ringer response</span><textarea value={response.bell} onChange={e=>updateResponse("bell",e.target.value)} placeholder="Write your opening response here."/></label><small className="privacyNote">Saved automatically on this Chromebook for this lesson.</small></section>
+   <section className="dailyResponse bellRinger"><div><small>START OF LESSON {lesson+1}</small><h2>Bell ringer</h2><p>{bellPrompt}</p></div><aside className="classroomHandoff"><b>Complete this response in today’s Google Classroom Daily Assignment.</b><span>Classroom is the official location for written work, submission, and teacher feedback.</span></aside></section>
    <section className="unitIntro"><div className="unitSketch" style={{backgroundImage:`url("${unitImages[unit-1]}")`}} role="img" aria-label={`${content.title} illustration`}/><small>UNIT OVERVIEW</small><h2>{content.essentialQuestion}</h2><h3>What should stay with you</h3><ul>{content.enduring.map(x=><li key={x}>{x}</li>)}</ul><div className="vocab"><b>Unit vocabulary <small>Choose a word for its definition.</small></b>{content.vocabulary.map(x=><button onClick={()=>showTerm(x)} key={x}>{x}</button>)}</div></section>
    <article className="lesson" id="lesson"><small>LESSON {lesson+1} OF {content.lessons.length}</small><h2>{activeLesson.title}</h2><p className="lessonPurpose">{activeLesson.purpose}</p><h3>Learning targets</h3><ul className="targets">{activeLesson.targets.map(x=><li key={x}>✓ {x}</li>)}</ul>{activeLesson.sections.map(s=><section className="knowledge" key={s.heading}><h3>{s.heading}</h3>{s.text&&<p>{s.text}</p>}{s.points&&<ul>{s.points.map(x=><li key={x}>{x}</li>)}</ul>}</section>)}<aside className="standard"><small>PROFESSIONAL STANDARD</small><p>{activeLesson.standard}</p></aside><div className="lessonColumns"><section><h3>In the kitchen</h3><ul>{activeLesson.kitchen.map(x=><li key={x}>{x}</li>)}</ul></section><section><h3>Check your understanding</h3><ol>{activeLesson.check.map(x=><li key={x}>{x}</li>)}</ol></section></div><aside className="evidence"><small>PORTFOLIO OPPORTUNITY</small><p>{activeLesson.evidence}</p></aside></article>
-   <section className="dailyResponse exitTicket"><div><small>END OF LESSON {lesson+1}</small><h2>Exit ticket</h2><p>{exitPrompt}</p></div><label><span className="srOnly">Exit ticket response</span><textarea value={response.exit} onChange={e=>updateResponse("exit",e.target.value)} placeholder="Write your closing response here."/></label><div className="dailyActions"><button className="outline" onClick={copyDaily}>Copy this lesson response</button><button className="red" onClick={emailDaily}>Open email draft</button></div><small className="privacyNote">The email draft includes your saved student details, this lesson’s prompts, and both responses. Add the instructor’s school email before sending.</small></section>
+   <section className="dailyResponse exitTicket"><div><small>END OF LESSON {lesson+1}</small><h2>Exit ticket</h2><p>{exitPrompt}</p></div><aside className="classroomHandoff"><b>Return to today’s Google Classroom Daily Assignment.</b><span>Complete the exit ticket there and submit the assignment when directed.</span></aside></section>
    <section className="unitResources"><div><h3>Unit progress</h3><div className="checklist">{tasks.map((t,i)=><label key={t}><input type="checkbox" checked={!!done[`${unit}-${i}`]} onChange={()=>toggle(`${unit}-${i}`)}/><span><b>{t}</b><small>{i<2?"Complete before production":"Complete after the lab"}</small></span></label>)}</div></div><div><h3>Connected recipes</h3><div className="connected">{recipes.filter(r=>r.unit===unit).sort((a,b)=>a.name.localeCompare(b.name)).map(r=><button className="row" key={r.name} onClick={()=>setRecipe(r)}><span>♨</span><b>{r.name}</b><strong>›</strong></button>)}</div>{!recipes.some(r=>r.unit===unit)&&<p className="note">This unit develops foundational knowledge without a standalone production formula.</p>}</div></section>
   </div></div></section>}
   {view==="recipes"&&!recipe&&<section className="page"><small>COMPLETE PRODUCTION FORMULAS</small><h1>Recipe Library</h1><p className="lead">Recipes are arranged alphabetically. Open one to prepare, cook, evaluate, or print that recipe alone.</p><label className="search">⌕ <input placeholder="Search all recipes" value={q} onChange={e=>setQ(e.target.value)}/></label><div className="recipeGrid">{filtered.map(r=><button onClick={()=>setRecipe(r)} key={r.name}><div><span>Future in-house photo</span></div><small>UNIT {r.unit}</small><h2>{r.name}</h2><span>{r.ingredients.length} ingredients • Complete recipe →</span></button>)}</div></section>}

@@ -4,7 +4,9 @@ The student-facing digital field manual for GCSD Culinary Arts 1 & 2.
 
 The site includes course units, lesson preparation and reflection prompts,
 recipes, culinary quick references, vocabulary definitions, and browser-saved
-student progress.
+unit checklist progress. It does not collect written responses, submissions,
+grades, or student-identifiable information. Google Classroom owns daily and
+named assignments, submission, and teacher feedback.
 
 ## Local development
 
