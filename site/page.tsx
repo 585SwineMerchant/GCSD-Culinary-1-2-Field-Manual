@@ -10,7 +10,7 @@ const units=unitContent.map(u=>[u.title,u.summary]);
 const asset=(path:string)=>`${import.meta.env.BASE_URL}${path}`;
 const unitImages=["unit-1-kitchen-readiness.png","unit-2-bread-grains-pasta.png","unit-3-flavor-math.png","unit-4-proteins-eggs.png","unit-5-stocks-soups-sauces.png","unit-6-produce-dairy.png","unit-7-baking-pastry.png","unit-8-global-menu.png"].map(name=>asset(`assets/${name}`));
 const unitTasks=[
- ["Preview the kitchen-readiness lessons","Demonstrate safe handwashing and sanitation","Complete the safety and equipment readiness checks","Demonstrate one professional habit during kitchen work"],
+ ["Complete the safety, hygiene, contamination, and hazard-station learning","Complete the Salsa Fresca planning, production, and evaluation record","Use actual yield, waste, and portion data in guided costing","Complete the kitchen-readiness reflection and Home Kitchen Safety Challenge work"],
  ["Preview the assigned formula and method","Identify the product’s key structure-building step","Complete the assigned bread, grain, or pasta lab","Evaluate structure, texture, and one next-step improvement"],
  ["Complete the assigned flavor, nutrition, or math task","Show calculations with units and check the result","Use a controlled taste-adjust-taste process when assigned","Explain your decision with evidence"],
  ["Preview the assigned egg or protein formula","Identify the required safety temperature and doneness signs","Complete the assigned production lab","Evaluate safety, doneness, texture, and organization"],
@@ -20,10 +20,56 @@ const unitTasks=[
  ["Complete the research, proposal, and production plan","Confirm the recipient, safety controls, and quality standard","Produce and serve the approved dish or experience","Submit evidence, feedback, and a specific reflection"]
 ];
 const glossary:Record<string,string>={
+ "professional trust":"Confidence earned when a person prepares, communicates, protects the team, completes responsibilities, and follows through consistently.",
+ "professionalism":"Behavior that shows workplace readiness, responsibility, respect, communication, and care.",
+ "reliability":"Consistently completing the work that other people are counting on you to do.",
+ "standard":"An agreed-upon expectation used to decide whether work is safe, correct, and complete.",
+ "station":"A worker’s assigned area, tools, ingredients, tasks, and responsibilities.",
+ "chain of communication":"The approved route for reporting questions, hazards, injuries, changes, and problems to the correct person.",
+ "incident":"An event that causes or could cause injury, illness, or damage.",
+ "prevention":"An action that keeps an incident from happening.",
+ "report":"Tell the correct person about a hazard, injury, change, or problem.",
+ "evacuate":"Leave an unsafe area using the approved route.",
+ "personal hygiene":"Habits that keep your body and clothing clean and ready for food work.",
+ "handwashing":"Cleaning hands with soap and running water using the approved steps.",
+ "illness reporting":"Telling the teacher when symptoms or a diagnosis could make food work unsafe.",
+ "ready-to-eat food":"Food that will be eaten without another cooking step.",
+ "contamination":"The presence of a harmful biological, chemical, or physical substance in food or on a surface.",
  "mise en place":"Everything in place: ingredients, equipment, information, and work arranged before production begins.",
  "cross-contamination":"The transfer of harmful microorganisms from one food, surface, or person to another.",
  "cross-contact":"The accidental transfer of a food allergen to another food or surface.",
+ "clean":"Free of visible food, soil, and debris.",
  "sanitize":"Reduce harmful microorganisms on a cleaned surface to a safe level.",
+ "hazard":"A condition or item that can cause injury, illness, or damage.",
+ "risk":"The chance that a hazard will cause harm.",
+ "corrective action":"A step taken to fix a problem and bring work back to the standard.",
+ "verify":"Check that information is correct or that a correction worked.",
+ "demonstration":"A teacher model that shows a process and the standard for performing it.",
+ "knife safety":"Habits that protect the cook and other people while a knife is selected, carried, used, cleaned, and stored.",
+ "recipe":"Written quantities and directions used to produce a food item consistently.",
+ "assign":"Give a specific task and responsibility to a team member.",
+ "quality":"How well a product meets its intended standard.",
+ "finished volume":"The measured amount of completed food produced by a recipe or batch.",
+ "waste":"Food or material that is discarded rather than used or served; avoidable waste reduces value.",
+ "purchase unit":"The package or quantity in which an ingredient is bought, such as a 32-ounce package, one lime, or one bunch.",
+ "purchase price":"The amount paid for one purchase unit.",
+ "unit cost":"The cost of one usable measure, such as one ounce, one item, or one bunch.",
+ "ingredient cost":"The cost of the quantity of one ingredient used in a recipe.",
+ "batch cost":"The total cost of all ingredients used to make one batch.",
+ "cost per portion":"The total batch cost divided by the number of portions produced.",
+ "label":"Written product identification and required date or storage information.",
+ "closeout":"The complete cleaning, storage, return, and inspection of a station.",
+ "evaluate":"Judge a product or process using specific evidence and a standard.",
+ "texture":"How food feels in the mouth or responds when handled.",
+ "flavor":"The combined experience of taste, aroma, texture, temperature, and other sensory information.",
+ "process":"The sequence of decisions and actions used to produce a result.",
+ "transfer":"Apply learning from one situation to another.",
+ "professional kitchen":"A workplace kitchen organized around shared standards, roles, communication, and accountability.",
+ "home kitchen":"A household cooking space used by family members or other home cooks.",
+ "audience":"The people a product, explanation, or experience is designed to help.",
+ "feedback":"Information that helps a person improve work.",
+ "revise":"Make a purposeful change to improve accuracy, clarity, or usefulness.",
+ "accuracy":"Information, measurement, or work that is correct and dependable.",
  "TCS food":"Food that needs time and temperature control for safety.",
  "FIFO":"First In, First Out: use the oldest safe product before newer product.",
  "conduction":"Heat transfer through direct contact.",
@@ -44,6 +90,7 @@ const glossary:Record<string,string>={
  "EP":"Edible portion: the usable amount after trimming or preparation.",
  "yield percent":"The edible-portion amount divided by the as-purchased amount, multiplied by 100.",
  "portion cost":"The total recipe cost divided by the number of portions produced.",
+ "quality standard":"The specific safety, taste, texture, appearance, consistency, yield, or process requirements used to judge successful work.",
  "conversion factor":"Desired yield divided by original yield; used to scale a recipe.",
  "coagulation":"The setting or firming of proteins through heat, acid, or another change.",
  "carryover cooking":"Cooking that continues after food leaves the heat source.",
@@ -125,7 +172,7 @@ export default function Home(){
   <section className="unitGallery"><div className="galleryHeading"><small>EIGHT CONNECTED UNITS</small><h2>Follow the course. Revisit any station.</h2></div><div>{units.map((u,i)=><button key={u[0]} onClick={()=>openUnit(i+1)}><img src={unitImages[i]} alt="" /><span><small>UNIT {i+1}</small><b>{u[0]}</b></span></button>)}</div></section></>}
   {view==="units"&&!recipe&&<section className="page unitPage"><div className="unitHeading"><div><small>{content.course.toUpperCase()} • UNIT {unit} OF {units.length}</small><h1>{content.title}</h1><p className="lead">{content.summary}</p></div><img src={unitImages[unit-1]} alt="" /></div><nav className="lessonToolbar" aria-label="Lesson navigation"><button className="menuToggle" onClick={()=>setMenuOpen(x=>!x)} aria-expanded={menuOpen} aria-controls="course-menu"><span aria-hidden="true">☰</span> {menuOpen?"Close menu":"Course menu"}</button><button onClick={previousLesson} disabled={unit===1&&lesson===0} aria-label="Open previous lesson">← <span>Previous lesson</span></button><div><small>UNIT {unit} • LESSON {lesson+1} OF {content.lessons.length}</small><b>{activeLesson.title}</b></div><button onClick={nextLesson} disabled={unit===units.length&&lesson===content.lessons.length-1} aria-label="Open next lesson"><span>Next lesson</span> →</button></nav><div className={`unitWorkspace ${menuOpen?"menuOpen":"menuClosed"}`}>
    <aside className="unitRail" id="course-menu" aria-hidden={!menuOpen}><div className="courseMenuHeader"><b>Course menu</b><button onClick={()=>setMenuOpen(false)} aria-label="Close course menu">×</button></div><label className="unitPicker"><span>Choose a unit</span><select value={unit} onChange={e=>openUnit(Number(e.target.value))}>{units.map((u,i)=><option value={i+1} key={u[0]}>Unit {i+1}: {u[0]}</option>)}</select></label><section className="lessonMenu"><small>LESSONS IN THIS UNIT</small><div className="lessonNav">{content.lessons.map((l,i)=><button className={lesson===i?"selectedLesson":""} onClick={()=>showLesson(i)} key={l.title} aria-current={lesson===i?"page":undefined}><span>{i+1}</span><b>{l.title}</b></button>)}</div></section><section className="unitIntro"><small>UNIT OVERVIEW</small><h2>{content.essentialQuestion}</h2><h3>What should stay with you</h3><ul>{content.enduring.map(x=><li key={x}>{x}</li>)}</ul><div className="vocab"><b>Unit vocabulary</b>{content.vocabulary.map(x=><button onClick={()=>showTerm(x)} key={x}>{x}</button>)}</div></section></aside>{menuOpen&&<button className="menuScrim" onClick={()=>setMenuOpen(false)} aria-label="Close course menu"/>}
-   <div className="unitDetail"><article className="lesson" id="lesson"><small>LESSON {lesson+1} OF {content.lessons.length}</small><h2>{activeLesson.title}</h2><p className="lessonPurpose">{activeLesson.purpose}</p><h3>Learning targets</h3><ul className="targets">{activeLesson.targets.map(x=><li key={x}>✓ {x}</li>)}</ul>{activeLesson.sections.map(s=><section className="knowledge" key={s.heading}><h3>{s.heading}</h3>{s.text&&<p>{s.text}</p>}{s.points&&<ul>{s.points.map(x=><li key={x}>{x}</li>)}</ul>}</section>)}<aside className="standard"><small>PROFESSIONAL STANDARD</small><p>{activeLesson.standard}</p></aside><div className="lessonColumns"><section><h3>In the kitchen</h3><ul>{activeLesson.kitchen.map(x=><li key={x}>{x}</li>)}</ul></section><section><h3>Check your understanding</h3><ol>{activeLesson.check.map(x=><li key={x}>{x}</li>)}</ol></section></div><aside className="evidence"><small>PORTFOLIO OPPORTUNITY</small><p>{activeLesson.evidence}</p></aside></article><section className="unitResources"><div><h3>Unit progress</h3><div className="checklist">{tasks.map((t,i)=><label key={t}><input type="checkbox" checked={!!done[`${unit}-${i}`]} onChange={()=>toggle(`${unit}-${i}`)}/><span><b>{t}</b><small>{i<2?"Complete before production":"Complete after the lab"}</small></span></label>)}</div></div><div><h3>Connected recipes</h3><div className="connected">{recipes.filter(r=>r.unit===unit).sort((a,b)=>a.name.localeCompare(b.name)).map(r=><button className="row" key={r.name} onClick={()=>setRecipe(r)}><span>♨</span><b>{r.name}</b><strong>›</strong></button>)}</div>{!recipes.some(r=>r.unit===unit)&&<p className="note">This unit develops foundational knowledge without a standalone production formula.</p>}</div></section></div>
+   <div className="unitDetail"><article className="lesson" id="lesson"><small>LESSON {lesson+1} OF {content.lessons.length}</small><h2>{activeLesson.title}</h2><p className="lessonPurpose">{activeLesson.purpose}</p><h3>Learning targets</h3><ul className="targets">{activeLesson.targets.map(x=><li key={x}>✓ {x}</li>)}</ul>{activeLesson.sections.map(s=><section className="knowledge" key={s.heading}><h3>{s.heading}</h3>{s.text&&<p>{s.text}</p>}{s.points&&<ul>{s.points.map(x=><li key={x}>{x}</li>)}</ul>}</section>)}<aside className="standard"><small>PROFESSIONAL STANDARD</small><p>{activeLesson.standard}</p></aside><div className="lessonColumns"><section><h3>In the kitchen</h3><ul>{activeLesson.kitchen.map(x=><li key={x}>{x}</li>)}</ul></section><section><h3>Check your understanding</h3><ol>{activeLesson.check.map(x=><li key={x}>{x}</li>)}</ol></section></div><aside className="evidence"><small>{unit===1?"EVIDENCE OF LEARNING":"PORTFOLIO OPPORTUNITY"}</small><p>{activeLesson.evidence}</p></aside></article><section className="unitResources"><div><h3>Unit progress</h3><div className="checklist">{tasks.map((t,i)=><label key={t}><input type="checkbox" checked={!!done[`${unit}-${i}`]} onChange={()=>toggle(`${unit}-${i}`)}/><span><b>{t}</b><small>{i<2?"Complete before production":"Complete after the lab"}</small></span></label>)}</div></div><div><h3>Connected recipes and materials</h3><div className="connected">{recipes.filter(r=>r.unit===unit).sort((a,b)=>a.name.localeCompare(b.name)).map(r=><button className="row" key={r.name} onClick={()=>setRecipe(r)}><span>♨</span><b>{r.name}</b><strong>›</strong></button>)}</div>{unit===1&&<p className="note">Use the approved Salsa Fresca Kitchen Readiness Lab packet and recipe posted in Google Classroom for the demonstration, both production days, evaluation, and costing work.</p>}{unit!==1&&!recipes.some(r=>r.unit===unit)&&<p className="note">This unit develops foundational knowledge without a standalone production formula.</p>}</div></section></div>
   </div></section>}
   {view==="recipes"&&!recipe&&<section className="page"><small>COMPLETE PRODUCTION FORMULAS</small><h1>Recipe Library</h1><p className="lead">Recipes are arranged alphabetically. Open one to prepare, cook, evaluate, or print that recipe alone.</p><label className="search">⌕ <input placeholder="Search all recipes" value={q} onChange={e=>setQ(e.target.value)}/></label><div className="recipeGrid">{filtered.map(r=><button onClick={()=>setRecipe(r)} key={r.name}><div><span>Future in-house photo</span></div><small>UNIT {r.unit}</small><h2>{r.name}</h2><span>{r.ingredients.length} ingredients • Complete recipe →</span></button>)}</div></section>}
   {recipe&&<section className="recipe"><div className="toolbar"><button onClick={()=>setRecipe(null)}>← Back</button><button onClick={()=>print()}>Print this recipe</button></div><article><small>UNIT {recipe.unit} • STANDARDIZED RECIPE</small><h1>{recipe.name}</h1><p className="lead callout">Read ingredients and method together before collecting equipment. Confirm batch, yield, allergens, and instructor adjustments.</p><div className="columns"><div><h2>Ingredients</h2><ul>{recipe.ingredients.map((x,i)=><li key={i}>{x}</li>)}</ul><h2>Equipment</h2><ul>{recipe.equipment.map((x,i)=><li key={i}>{x}</li>)}</ul></div><div><h2>Method</h2><ol>{recipe.method.map((x,i)=><li key={i}>{x}</li>)}</ol></div></div><div className="after"><h2>After the lab</h2><p>Evaluate taste, texture, appearance, safety, organization, and the one change that would most improve the next attempt.</p></div></article></section>}
